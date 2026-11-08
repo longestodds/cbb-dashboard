@@ -16,10 +16,10 @@ st.caption("Automated daily model projections & betting edges")
 @st.cache_data(ttl=10)
 def load_data():
     try:
-        df = pd.read_csv("data.csv")
+        df = pd.read_json("data.json")
         return df
     except Exception as e:
-        st.error(f"Error loading CSV: {e}")
+        st.error(f"Error loading JSON: {e}")
         return pd.DataFrame()
 
 df = load_data()
@@ -28,5 +28,5 @@ if df.empty:
     st.warning("DataFrame is empty. Checking file structure...")
 else:
     st.success(f"Successfully loaded {len(df)} rows!")
-    st.write("Columns found in your CSV:", list(df.columns))
+    st.write("Columns found in your JSON:", list(df.columns))
     st.dataframe(df.head(3))
