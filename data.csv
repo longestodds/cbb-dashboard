@@ -18,14 +18,14 @@ Recommendation,ML Win
 Probability,SIGNAL
 Moneyline 
 Parlay
-Morgan St Bears,Niagara Purple Eagles,9.5,Morgan St.,Niagara,-18.02,-13.58,71.3,-6.415719999999999,15.91572,0,0,? STRONG PLAY,Niagara Purple Eagles to Cover,0.7362397371109811,? VALUE EDGE
+Morgan St Bears,Niagara Purple Eagles,9.5,Morgan St.,Niagara,-18.02,-13.58,71.3,-6.415719999999999,15.91572,0,1,? STRONG PLAY,Niagara Purple Eagles to Cover,0.7362397371109811,? VALUE EDGE
 Mercer Bears,Davidson Wildcats,-12.5,Mercer,Davidson,-6,6.76,70.65,-12.26494,-0.2350600000000007,1,0,NO PLAY,,0.8767914157836237,? PARLAY
-Northern Illinois Huskies,Dayton Flyers,-3.5,Northern Illinois,Dayton,-12.26,13.63,70.05000000000001,-21.385945000000003,17.885945000000003,1,0,? TOP PLAY,Dayton Flyers to Cover,0.9683774418767662,? ELITE ANCHOR
-St. Bonaventure Bonnies,Canisius Golden Griffins,32.5,St. Bonaventure,Canisius,-5.14,-17.37,70.4,5.359920000000001,27.140079999999998,0,0,? STRONG PLAY,Canisius Golden Griffins to Cover,0.7021563049039362,? VALUE EDGE
-Houston Christian Huskies,Western Illinois Leathernecks,5.5,Houston Christian,Western Illinois,-6.15,-23,69.6,8.477599999999999,-2.977599999999999,0,0,NO PLAY,,0.7951765863352862,? PARLAY
+Northern Illinois Huskies,Dayton Flyers,-3.5,Northern Illinois,Dayton,-12.26,13.63,70.05000000000001,-21.385945000000003,17.885945000000003,0.5,0.333,? STRONG PLAY,Dayton Flyers to Cover,0.9683774418767662,? ELITE ANCHOR
+St. Bonaventure Bonnies,Canisius Golden Griffins,32.5,St. Bonaventure,Canisius,-5.14,-17.37,70.4,5.359920000000001,27.140079999999998,0,0.5,? STRONG PLAY,Canisius Golden Griffins to Cover,0.7021563049039362,? VALUE EDGE
+Houston Christian Huskies,Western Illinois Leathernecks,5.5,Houston Christian,Western Illinois,-6.15,-23,69.6,8.477599999999999,-2.977599999999999,0.5,0,NO PLAY,,0.7951765863352862,? PARLAY
 Providence Friars,Nebraska Cornhuskers,-7.5,Providence,Nebraska,16.95,25.2,72.25,-9.210625,1.7106250000000003,1,0,NO PLAY,,0.8136191165020722,? PARLAY
 Maryland Terrapins,Georgetown Hoyas,-11.5,Maryland,Georgetown,16.88,11.27,70.3,0.6938299999999997,-12.19383,0,0,NO PLAY,,0.5277247329114382,NO PLAY
-Denver Pioneers,UC Riverside Highlanders,5.5,Denver,UC Riverside,-4.56,-4.75,71.65,-3.1138649999999997,8.613865,0,1,? STRONG PLAY,UC Riverside Highlanders to Cover,0.6220405573335861,STANDARD
+Denver Pioneers,UC Riverside Highlanders,5.5,Denver,UC Riverside,-4.56,-4.75,71.65,-3.1138649999999997,8.613865,1,0.5,? TOP PLAY,UC Riverside Highlanders to Cover,0.6220405573335861,STANDARD
 Bethune-Cookman Wildcats,Grand Canyon Antelopes,-30.5,Bethune Cookman,Grand Canyon,-4.72,17.49,72.3,-19.307829999999996,-11.192170000000004,0,0.5,NO PLAY,,0.956447250363882,? ELITE ANCHOR
 Pacific Tigers,Bradley Braves,8.5,Pacific,Bradley,1.47,-2.53,69.94999999999999,-0.4520000000000004,8.952,0,0,? STRONG PLAY,Bradley Braves to Cover,0.518072123977795,NO PLAY
 Evansville Purple Aces,Southern Indiana Screaming Eagles,6.5,Evansville,Southern Indiana,-8.59,-13.78,71.4,0.45565999999999995,6.04434,0,0,? STRONG PLAY,Southern Indiana Screaming Eagles to Cover,0.5182183311683658,NO PLAY
