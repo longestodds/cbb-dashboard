@@ -24,40 +24,56 @@ def load_data():
 
 df = load_data()
 
+# Exact column names from your Google Sheet
+home_col = "Home Team"
+away_col = "Away Team"
+spread_col = "Spread \n(Home Team)\n(column B)"
+proj_col = "Model Spread \n(Home Team Column B)"
+edge_col = "Model Edge\nGreen Favors Home\nBlue Favors Away"
+ml_prob_col = "ML Win \nProbability"
+best_bet_col = "Best Bet \nRecommendation"
+
+if not df.empty:
+    # Drop empty/blank rows to fix the 999 count issue
+    df = df.dropna(subset=[home_col, away_col])
+    df = df[df[home_col].astype(str).str.strip() != ""]
+    df = df[df[away_col].astype(str).str.strip() != ""]
+    df = df[~df[home_col].astype(str).str.lower().isin(['nan', 'none', ''])]
+
 if df.empty:
-    st.warning("Waiting for data sync...")
+    st.warning("Waiting for active games data...")
 else:
     search = st.text_input("🔍 Search Team", placeholder="Type team name...")
     filter_choice = st.radio("Filter View", ["All Games", "🔥 Top Plays", "🎯 ML Parlays"], horizontal=True)
-
-    # Use exact column names from your Google Sheet
-    home_col = "Home Team"
-    away_col = "Away Team"
-    spread_col = "Spread \n(Home Team)\n(column B)"
-    proj_col = "Model Spread \n(Home Team Column B)"
-    edge_col = "Model Edge\nGreen Favors Home\nBlue Favors Away"
-    ml_prob_col = "ML Win \nProbability"
-    best_bet_col = "Best Bet \nRecommendation"
 
     if search and not df.empty:
         df = df[df[home_col].str.contains(search, case=False, na=False) | df[away_col].str.contains(search, case=False, na=False)]
     
     if filter_choice == "🔥 Top Plays" and not df.empty:
-        df = df[df[best_bet_col].notna() & (df[best_bet_col] != 'NO PLAY')]
+        df = df[df[best_bet_col].notna() & (df[best_bet_col].astype(str).str.strip() != '') & (df[best_bet_col] != 'NO PLAY')]
     elif filter_choice == "🎯 ML Parlays" and not df.empty:
-        df = df[df[ml_prob_col] >= 0.80]
+        df['temp_prob'] = pd.to_numeric(df[ml_prob_col], errors='coerce')
+        df = df[df['temp_prob'] >= 0.80]
 
-    st.markdown(f"**Showing {len(df)} games**")
+    st.markdown(f"**Showing {len(df)} active games**")
     st.divider()
+
+    def fmt(val):
+        try:
+            return f"{float(val):.2f}"
+        except (ValueError, TypeError):
+            return val if val is not None else "N/A"
 
     for _, row in df.iterrows():
         home = row.get(home_col, 'Home')
         away = row.get(away_col, 'Away')
-        v_spread = row.get(spread_col, 'N/A')
-        m_proj = row.get(proj_col, 'N/A')
-        m_edge = row.get(edge_col, 'N/A')
-        ml_prob = row.get(ml_prob_col, 'N/A')
+        v_spread = fmt(row.get(spread_col))
+        m_proj = fmt(row.get(proj_col))
+        m_edge = fmt(row.get(edge_col))
+        ml_prob = fmt(row.get(ml_prob_col))
         best_bet = row.get(best_bet_col, 'NO PLAY')
+        if pd.isna(best_bet) or str(best_bet).strip() == '':
+            best_bet = 'NO PLAY'
 
         st.markdown(f"""
             <div class="card">
