@@ -36,7 +36,6 @@ ml_prob_col = "ML Win \nProbability"
 best_bet_col = "Best Bet \nRecommendation"
 
 if not df.empty:
-    # Drop empty/blank rows
     df = df.dropna(subset=[home_col, away_col])
     df = df[df[home_col].astype(str).str.strip() != ""]
     df = df[df[away_col].astype(str).str.strip() != ""]
@@ -60,11 +59,19 @@ else:
     st.markdown(f"**Showing {len(df)} active games**")
     st.divider()
 
-    def fmt(val):
+    def fmt_signed(val):
         try:
-            return f"{float(val):.2f}"
+            f = float(val)
+            return f"+{f:.2f}" if f > 0 else f"{f:.2f}"
         except (ValueError, TypeError):
             return val if val is not None else "N/A"
+
+    def fmt_inverse(val):
+        try:
+            f = -float(val)
+            return f"+{f:.2f}" if f > 0 else f"{f:.2f}"
+        except (ValueError, TypeError):
+            return "N/A"
 
     def fmt_pct(val):
         try:
@@ -75,12 +82,21 @@ else:
     for _, row in df.iterrows():
         home = row.get(home_col, 'Home')
         away = row.get(away_col, 'Away')
-        v_spread = fmt(row.get(spread_col))
-        m_proj = fmt(row.get(proj_col))
-        m_edge = fmt(row.get(edge_col))
+        
+        # Spreads & Projections for both sides
+        v_spread_home = row.get(spread_col)
+        home_spread = fmt_signed(v_spread_home)
+        away_spread = fmt_inverse(v_spread_home)
+
+        m_proj_home = row.get(proj_col)
+        home_proj = fmt_signed(m_proj_home)
+        away_proj = fmt_inverse(m_proj_home)
+
+        m_edge = fmt_signed(row.get(edge_col))
         ml_prob = fmt_pct(row.get(ml_prob_col))
         home_ats = fmt_pct(row.get(home_ats_col))
         away_ats = fmt_pct(row.get(away_ats_col))
+        
         best_bet = row.get(best_bet_col, 'NO PLAY')
         if pd.isna(best_bet) or str(best_bet).strip() == '':
             best_bet = 'NO PLAY'
@@ -89,8 +105,10 @@ else:
             <div class="card">
                 <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">{away} @ {home}</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9rem; color: #9ca3af;">
-                    <div>Vegas Spread ({home}): <b style="color:#f3f4f6;">{v_spread}</b></div>
-                    <div>Model Proj ({home}): <b style="color:#f3f4f6;">{m_proj}</b></div>
+                    <div>Vegas Spread ({away}): <b style="color:#f3f4f6;">{away_spread}</b></div>
+                    <div>Vegas Spread ({home}): <b style="color:#f3f4f6;">{home_spread}</b></div>
+                    <div>Model Proj ({away}): <b style="color:#f3f4f6;">{away_proj}</b></div>
+                    <div>Model Proj ({home}): <b style="color:#f3f4f6;">{home_proj}</b></div>
                     <div>Model Edge: <b style="color:#60a5fa;">{m_edge}</b></div>
                     <div>ML Win Prob ({home}): <b style="color:#34d399;">{ml_prob}</b></div>
                     <div>ATS ({away}): <b style="color:#f3f4f6;">{away_ats}</b></div>
