@@ -79,8 +79,8 @@ else:
         m_proj = fmt(row.get(proj_col))
         m_edge = fmt(row.get(edge_col))
         ml_prob = fmt_pct(row.get(ml_prob_col))
-        home_ats = row.get(home_ats_col, 'N/A')
-        away_ats = row.get(away_ats_col, 'N/A')
+        home_ats = fmt_pct(row.get(home_ats_col))
+        away_ats = fmt_pct(row.get(away_ats_col))
         best_bet = row.get(best_bet_col, 'NO PLAY')
         if pd.isna(best_bet) or str(best_bet).strip() == '':
             best_bet = 'NO PLAY'
