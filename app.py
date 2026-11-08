@@ -30,11 +30,13 @@ away_col = "Away Team"
 spread_col = "Spread \n(Home Team)\n(column B)"
 proj_col = "Model Spread \n(Home Team Column B)"
 edge_col = "Model Edge\nGreen Favors Home\nBlue Favors Away"
+home_ats_col = "Home \nTeam \nATS %"
+away_ats_col = "Away \nTeam\nATS %"
 ml_prob_col = "ML Win \nProbability"
 best_bet_col = "Best Bet \nRecommendation"
 
 if not df.empty:
-    # Drop empty/blank rows to fix the 999 count issue
+    # Drop empty/blank rows
     df = df.dropna(subset=[home_col, away_col])
     df = df[df[home_col].astype(str).str.strip() != ""]
     df = df[df[away_col].astype(str).str.strip() != ""]
@@ -64,13 +66,21 @@ else:
         except (ValueError, TypeError):
             return val if val is not None else "N/A"
 
+    def fmt_pct(val):
+        try:
+            return f"{float(val) * 100:.1f}%"
+        except (ValueError, TypeError):
+            return val if val is not None else "N/A"
+
     for _, row in df.iterrows():
         home = row.get(home_col, 'Home')
         away = row.get(away_col, 'Away')
         v_spread = fmt(row.get(spread_col))
         m_proj = fmt(row.get(proj_col))
         m_edge = fmt(row.get(edge_col))
-        ml_prob = fmt(row.get(ml_prob_col))
+        ml_prob = fmt_pct(row.get(ml_prob_col))
+        home_ats = row.get(home_ats_col, 'N/A')
+        away_ats = row.get(away_ats_col, 'N/A')
         best_bet = row.get(best_bet_col, 'NO PLAY')
         if pd.isna(best_bet) or str(best_bet).strip() == '':
             best_bet = 'NO PLAY'
@@ -83,6 +93,8 @@ else:
                     <div>Model Proj ({home}): <b style="color:#f3f4f6;">{m_proj}</b></div>
                     <div>Model Edge: <b style="color:#60a5fa;">{m_edge}</b></div>
                     <div>ML Win Prob ({home}): <b style="color:#34d399;">{ml_prob}</b></div>
+                    <div>ATS ({away}): <b style="color:#f3f4f6;">{away_ats}</b></div>
+                    <div>ATS ({home}): <b style="color:#f3f4f6;">{home_ats}</b></div>
                 </div>
                 <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #1f2937; font-size: 0.85rem;">
                     Best Bet: <span style="background: rgba(16, 185, 129, 0.1); color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{best_bet}</span>
