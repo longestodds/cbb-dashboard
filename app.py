@@ -46,16 +46,24 @@ if df.empty:
     st.warning("Waiting for active games data...")
 else:
     search = st.text_input("🔍 Search Team", placeholder="Type team name...")
-    filter_choice = st.radio("Filter View", ["All Games", "🔥 Top Plays", "🎯 ML Parlays"], horizontal=True)
+    
+    # Updated filter categories
+    filter_choice = st.radio(
+        "Filter View", 
+        ["All Games", "Best Spread Bets", "Straight ML Picks", "ML Parlays"], 
+        horizontal=True
+    )
 
     if search and not df.empty:
         df = df[df[home_col].str.contains(search, case=False, na=False) | df[away_col].str.contains(search, case=False, na=False)]
     
-    if filter_choice == "🔥 Top Plays" and not df.empty:
+    # Apply filtering logic based on user selection
+    if filter_choice == "Best Spread Bets" and not df.empty:
         df = df[df[best_bet_col].notna() & (df[best_bet_col].astype(str).str.strip() != '') & (df[best_bet_col] != 'NO PLAY')]
-    elif filter_choice == "🎯 ML Parlays" and not df.empty:
-        # Filter for your new parlay and value tiers
-        valid_parlays = ["🔥 PRIME PARLAY", "⭐ ML PARLAY", "RISKY ML VALUE"]
+    elif filter_choice == "Straight ML Picks" and not df.empty:
+        df = df[df[parlay_signal_col] == "RISKY ML VALUE"]
+    elif filter_choice == "ML Parlays" and not df.empty:
+        valid_parlays = ["🔥 PRIME PARLAY", "⭐ ML PARLAY"]
         df = df[df[parlay_signal_col].isin(valid_parlays)]
 
     st.markdown(f"**Showing {len(df)} active games**")
@@ -85,7 +93,6 @@ else:
         home = row.get(home_col, 'Home')
         away = row.get(away_col, 'Away')
         
-        # Spreads & Projections for both sides
         v_spread_home = row.get(spread_col)
         home_spread = fmt_signed(v_spread_home)
         away_spread = fmt_inverse(v_spread_home)
