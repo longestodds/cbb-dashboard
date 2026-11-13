@@ -34,6 +34,7 @@ home_ats_col = "Home \nTeam \nATS %"
 away_ats_col = "Away \nTeam\nATS %"
 ml_prob_col = "ML Win \nProbability"
 best_bet_col = "Best Bet \nRecommendation"
+parlay_signal_col = "SIGNAL\nMoneyline \nParlay"
 
 if not df.empty:
     df = df.dropna(subset=[home_col, away_col])
@@ -53,8 +54,9 @@ else:
     if filter_choice == "🔥 Top Plays" and not df.empty:
         df = df[df[best_bet_col].notna() & (df[best_bet_col].astype(str).str.strip() != '') & (df[best_bet_col] != 'NO PLAY')]
     elif filter_choice == "🎯 ML Parlays" and not df.empty:
-        df['temp_prob'] = pd.to_numeric(df[ml_prob_col], errors='coerce')
-        df = df[df['temp_prob'] >= 0.80]
+        # Filter for your new parlay and value tiers
+        valid_parlays = ["🔥 PRIME PARLAY", "⭐ ML PARLAY", "RISKY ML VALUE"]
+        df = df[df[parlay_signal_col].isin(valid_parlays)]
 
     st.markdown(f"**Showing {len(df)} active games**")
     st.divider()
@@ -101,6 +103,23 @@ else:
         if pd.isna(best_bet) or str(best_bet).strip() == '':
             best_bet = 'NO PLAY'
 
+        parlay_signal = row.get(parlay_signal_col, 'NO PLAY')
+        if pd.isna(parlay_signal) or str(parlay_signal).strip() == '':
+            parlay_signal = 'NO PLAY'
+
+        # Style tag color based on parlay tier
+        signal_bg = "rgba(31, 41, 55, 0.5)"
+        signal_color = "#9ca3af"
+        if "PRIME PARLAY" in parlay_signal:
+            signal_bg = "rgba(16, 185, 129, 0.1)"
+            signal_color = "#34d399"
+        elif "ML PARLAY" in parlay_signal:
+            signal_bg = "rgba(59, 130, 246, 0.1)"
+            signal_color = "#60a5fa"
+        elif "RISKY ML VALUE" in parlay_signal:
+            signal_bg = "rgba(245, 158, 11, 0.1)"
+            signal_color = "#fbbf24"
+
         st.markdown(f"""
             <div class="card">
                 <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;">{away} @ {home}</div>
@@ -114,8 +133,9 @@ else:
                     <div>ATS ({away}): <b style="color:#f3f4f6;">{away_ats}</b></div>
                     <div>ATS ({home}): <b style="color:#f3f4f6;">{home_ats}</b></div>
                 </div>
-                <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #1f2937; font-size: 0.85rem;">
-                    Best Bet: <span style="background: rgba(16, 185, 129, 0.1); color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{best_bet}</span>
+                <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #1f2937; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>Best Bet: <span style="background: rgba(16, 185, 129, 0.1); color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{best_bet}</span></div>
+                    <div>ML Signal: <span style="background: {signal_bg}; color: {signal_color}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{parlay_signal}</span></div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
